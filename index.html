@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TP Joset – Terrassement & Diagnostic Réseaux – Charquemont (25)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rouge: #CC1414;
+      --rouge-dark: #a00f0f;
+      --gris: #4A4A4A;
+      --gris-clair: #8A8A8A;
+      --gris-bg: #F4F4F4;
+      --noir: #1A1A1A;
+      --blanc: #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--noir); background: var(--blanc); overflow-x: hidden; }
+
+    /* ══════════════════════════════
+       NAVIGATION BARRE PRINCIPALE
+    ══════════════════════════════ */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--blanc);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+
+    .nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 48px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .nav-logo-img {
+      height: 64px;
+      object-fit: contain;
+    }
+
+    .nav-logo-text {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--rouge);
+      letter-spacing: 0.08em;
+    }
+
+    .nav-logo-sub {
+      font-size: 0.72rem;
+      color: var(--gris);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      background: var(--blanc);
+      border-top: 3px solid var(--rouge);
+    }
+
+    .nav-bar a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 22px;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500;
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris);
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -3px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .nav-bar a:hover, .nav-bar a.active {
+      color: var(--rouge);
+      border-bottom-color: var(--rouge);
+    }
+
+    .nav-bar a.nav-devis {
+      background: var(--rouge);
+      color: var(--blanc);
+      margin-left: 12px;
+      border-bottom-color: transparent;
+    }
+
+    .nav-bar a.nav-devis:hover { background: var(--rouge-dark); }
+
+    .nav-icon { font-size: 1rem; }
+
+    /* ══════════════════════════════
+       SECTIONS COMMUNES
+    ══════════════════════════════ */
+    .page-section {
+      display: none;
+      min-height: 100vh;
+      padding-top: 128px;
+    }
+
+    .page-section.active { display: block; }
+
+    .section-eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rouge);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      text-transform: uppercase;
+      color: var(--noir);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    /* ══════════════════════════════
+       ACCUEIL
+    ══════════════════════════════ */
+    #section-accueil {
+      padding-top: 128px;
+    }
+
+    .hero-wrapper {
+      position: relative;
+      height: calc(100vh - 128px);
+      min-height: 500px;
+      overflow: hidden;
+      background: var(--noir);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(26,26,26,0.82) 40%, rgba(26,26,26,0.4) 100%),
+        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80') center/cover no-repeat;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 80px;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--rouge);
+      color: var(--blanc);
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+
+    .hero-title {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      text-transform: uppercase;
+      color: var(--blanc);
+      line-height: 1.0;
+      margin-bottom: 20px;
+    }
+
+    .hero-title span { color: var(--rouge); }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-rouge {
+      background: var(--rouge);
+      color: var(--blanc);
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-rouge:hover { background: var(--rouge-dark); transform: translateY(-2px); }
+
+    .btn-blanc {
+      background: transparent;
+      color: var(--blanc);
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 12px 32px;
+      border: 2px solid rgba(255,255,255,0.6);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-blanc:hover { border-color: var(--blanc); color: var(--blanc); }
+
+    /* Stats bar */
+    .hero-stats-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      background: var(--rouge);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .hstat {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 48px;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .hstat:last-child { border-right: none; }
+
+    .hstat-num {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--blanc);
+    }
+
+    .hstat-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Accueil infos rapides */
+    .accueil-infos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      background: var(--gris-bg);
+    }
+
+    .info-card {
+      padding: 48px 40px;
+      border-right: 1px solid #ddd;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .info-card:last-child { border-right: none; }
+
+    .info-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-titre {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .info-texte { font-size: 0.88rem; color: var(--gris); line-height: 1.6; }
+
+    /* ══════════════════════════════
+       PRESTATIONS
+    ══════════════════════════════ */
+    #section-prestations {
+      background: var(--blanc);
+    }
+
+    .prestations-intro {
+      padding: 80px 80px 48px;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .prestations-intro p {
+      font-size: 1rem;
+      color: var(--gris);
+      line-height: 1.75;
+    }
+
+    .prestations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .presta-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      display: flex;
+      align-items: flex-end;
+      cursor: default;
+    }
+
+    .presta-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s;
+    }
+
+    .presta-card:hover .presta-bg { transform: scale(1.04); }
+
+    .presta-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,26,26,0.92) 0%, rgba(26,26,26,0.3) 60%, transparent 100%);
+    }
+
+    .presta-content {
+      position: relative;
+      z-index: 2;
+      padding: 40px;
+      width: 100%;
+    }
+
+    .presta-tag {
+      display: inline-block;
+      background: var(--rouge);
+      color: var(--blanc);
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      margin-bottom: 12px;
+    }
+
+    .presta-titre {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      color: var(--blanc);
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .presta-desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .presta-liste {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .presta-liste li {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--blanc);
+      font-size: 0.78rem;
+      padding: 4px 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .prestations-photos-placeholder {
+      background: var(--gris-bg);
+      padding: 60px 80px;
+      text-align: center;
+      border-top: 3px solid var(--rouge);
+    }
+
+    .placeholder-box {
+      border: 2px dashed #ccc;
+      padding: 40px;
+      color: var(--gris-clair);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════
+       TERRASSEMENT
+    ══════════════════════════════ */
+    #section-terrassement {
+      background: var(--blanc);
+    }
+
+    .detail-hero {
+      position: relative;
+      height: 340px;
+      overflow: hidden;
+      background: var(--noir);
+    }
+
+    .detail-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(26,26,26,0.85) 40%, rgba(26,26,26,0.4) 100%),
+        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80') center/cover;
+    }
+
+    .detail-hero-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 80px;
+    }
+
+    .detail-hero-content .section-title { color: var(--blanc); margin-bottom: 0; }
+
+    .detail-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .detail-text {
+      padding: 64px 64px 64px 80px;
+    }
+
+    .detail-text p {
+      font-size: 0.95rem;
+      color: var(--gris);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .detail-points {
+      list-style: none;
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .detail-points li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--noir);
+    }
+
+    .detail-points li::before {
+      content: '▶';
+      color: var(--rouge);
+      font-size: 0.7rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .detail-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      min-height: 380px;
+    }
+
+    .detail-cta-bar {
+      background: var(--rouge);
+      padding: 36px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .detail-cta-bar p {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--blanc);
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════
+       DIAGNOSTIC RÉSEAUX
+    ══════════════════════════════ */
+    #section-diagnostic {
+      background: var(--blanc);
+    }
+
+    .diag-hero-bg {
+      background-image:
+        linear-gradient(to right, rgba(26,26,26,0.85) 40%, rgba(26,26,26,0.4) 100%),
+        url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80') !important;
+      background-size: cover !important;
+      background-position: center !important;
+    }
+
+    .diag-steps {
+      padding: 64px 80px;
+      background: var(--gris-bg);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .step-card {
+      background: var(--blanc);
+      border-top: 4px solid var(--rouge);
+      padding: 28px 24px;
+    }
+
+    .step-num {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: var(--rouge);
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .step-titre {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .step-desc { font-size: 0.84rem; color: var(--gris); line-height: 1.6; }
+
+    /* ══════════════════════════════
+       AVIS CLIENTS
+    ══════════════════════════════ */
+    #section-avis {
+      background: var(--gris-bg);
+    }
+
+    .avis-content {
+      padding: 80px 80px;
+    }
+
+    .avis-vide {
+      text-align: center;
+      padding: 80px 40px;
+      background: var(--blanc);
+      border: 2px dashed #ddd;
+      max-width: 600px;
+      margin: 48px auto 0;
+    }
+
+    .avis-vide-icon { font-size: 3rem; margin-bottom: 20px; }
+
+    .avis-vide h3 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .avis-vide p {
+      font-size: 0.9rem;
+      color: var(--gris);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    .stars-display {
+      font-size: 2rem;
+      letter-spacing: 4px;
+      color: #FFB800;
+      margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════
+       DEVIS
+    ══════════════════════════════ */
+    #section-devis {
+      background: var(--blanc);
+    }
+
+    .devis-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 0;
+      min-height: calc(100vh - 128px);
+    }
+
+    .devis-left {
+      background: var(--noir);
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .devis-left .section-title { color: var(--blanc); }
+    .devis-left .section-eyebrow { color: var(--rouge); }
+
+    .devis-left p {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--rouge);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gris-clair);
+      margin-bottom: 2px;
+    }
+
+    .contact-item-val {
+      font-size: 0.95rem;
+      color: var(--blanc);
+    }
+
+    .devis-right {
+      padding: 80px 60px;
+      background: var(--blanc);
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-label {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gris);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      border: 1.5px solid #ddd;
+      background: var(--blanc);
+      color: var(--noir);
+      padding: 12px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--rouge);
+    }
+
+    .form-textarea { min-height: 110px; resize: vertical; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ══════════════════════════════
+       CARTE
+    ══════════════════════════════ */
+    #section-carte {
+      background: var(--blanc);
+    }
+
+    .carte-content {
+      padding: 80px 80px 0;
+    }
+
+    #map {
+      height: 520px;
+      width: 100%;
+      margin-top: 40px;
+      border: 3px solid var(--rouge);
+    }
+
+    .carte-legende {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 24px 80px 60px;
+      background: var(--gris-bg);
+      margin-top: 0;
+    }
+
+    .legende-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--gris);
+    }
+
+    .legende-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--rouge);
+      flex-shrink: 0;
+    }
+
+    .legende-cercle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--rouge);
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      .nav-bar { flex-wrap: wrap; justify-content: center; }
+      .nav-bar a { padding: 10px 12px; font-size: 0.78rem; }
+      .hero-content, .detail-hero-content { padding: 0 24px; }
+      .detail-body, .prestations-grid, .devis-wrapper, .accueil-infos { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .detail-cta-bar { flex-direction: column; gap: 16px; text-align: center; }
+      .avis-content, .carte-content, .carte-legende, .diag-steps { padding-left: 24px; padding-right: 24px; }
+      .devis-left, .devis-right { padding: 48px 24px; }
+      .detail-text { padding: 40px 24px; }
+      .hstat { padding: 14px 20px; }
+      .prestations-photos-placeholder { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     NAVIGATION
+══════════════════════════════ -->
+<div id="navbar">
+  <div class="nav-top">
+    <div>
+      <div class="nav-logo-text">TP JOSET</div>
+      <div class="nav-logo-sub">Terrassement & Diagnostic Réseaux — Charquemont (25)</div>
+    </div>
+  </div>
+  <nav class="nav-bar">
+    <a href="#" class="nav-link active" data-section="accueil"><span class="nav-icon">🏠</span> Accueil</a>
+    <a href="#" class="nav-link" data-section="prestations">Prestations</a>
+    <a href="#" class="nav-link" data-section="terrassement">Terrassement</a>
+    <a href="#" class="nav-link" data-section="diagnostic">Diagnostic Réseaux</a>
+    <a href="#" class="nav-link" data-section="avis">Avis Clients</a>
+    <a href="#" class="nav-link" data-section="carte">Où nous trouver</a>
+    <a href="#" class="nav-link nav-devis" data-section="devis">📋 Obtenir un devis</a>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     ACCUEIL
+══════════════════════════════ -->
+<div id="section-accueil" class="page-section active">
+  <div class="hero-wrapper">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">📍 Charquemont – Doubs (25)</div>
+      <h1 class="hero-title">Terrassement &<br><span>Diagnostic Réseaux</span></h1>
+      <p class="hero-sub">
+        TP Joset intervient chez les particuliers pour tous vos travaux extérieurs : terrassement, nivellement, fondations et diagnostic de réseaux enterrés. Devis gratuit sous 48h.
+      </p>
+      <div class="hero-btns">
+        <a href="#" class="btn-rouge nav-link" data-section="devis">Demander un devis gratuit</a>
+        <a href="#" class="btn-blanc nav-link" data-section="prestations">Nos prestations</a>
+      </div>
+    </div>
+    <div class="hero-stats-bar">
+      <div class="hstat">
+        <div class="hstat-num">15+</div>
+        <div class="hstat-label">Ans d'expérience</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">300+</div>
+        <div class="hstat-label">Chantiers réalisés</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">20 km</div>
+        <div class="hstat-label">Rayon d'intervention</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">100%</div>
+        <div class="hstat-label">Devis gratuits</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accueil-infos">
+    <div class="info-card">
+      <div class="info-icon">🚜</div>
+      <div>
+        <div class="info-titre">Terrassement</div>
+        <p class="info-texte">Décaissement, nivellement, remblai, fondations — tous vos travaux de terrassement pour particuliers.</p>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🔍</div>
+      <div>
+        <div class="info-titre">Diagnostic Réseaux</div>
+        <p class="info-texte">Localisation et inspection de vos réseaux enterrés (eau, gaz, électricité, assainissement) avant travaux.</p>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">📋</div>
+      <div>
+        <div class="info-titre">Devis gratuit</div>
+        <p class="info-texte">Nous vous répondons sous 48h et nous déplaçons gratuitement pour évaluer votre projet sur site.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PRESTATIONS
+══════════════════════════════ -->
+<div id="section-prestations" class="page-section">
+  <div class="prestations-intro">
+    <div class="section-eyebrow">Nos domaines</div>
+    <h2 class="section-title">Nos spécialités</h2>
+    <p>TP Joset est spécialisé dans deux domaines complémentaires des travaux extérieurs pour les particuliers. Découvrez nos prestations en détail.</p>
+  </div>
+
+  <div class="prestations-grid">
+    <div class="presta-card">
+      <div class="presta-bg" style="background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&q=80');"></div>
+      <div class="presta-overlay"></div>
+      <div class="presta-content">
+        <div class="presta-tag">Spécialité n°1</div>
+        <div class="presta-titre">Terrassement</div>
+        <p class="presta-desc">Préparation de terrain, décaissement, remblai, nivellement et réalisation de fondations pour tous vos projets de construction ou d'aménagement extérieur.</p>
+        <ul class="presta-liste">
+          <li>Décaissement</li>
+          <li>Nivellement</li>
+          <li>Fondations</li>
+          <li>Remblai</li>
+          <li>Murs de soutènement</li>
+          <li>Voirie privée</li>
+        </ul>
+      </div>
+    </div>
+    <div class="presta-card">
+      <div class="presta-bg" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80');"></div>
+      <div class="presta-overlay"></div>
+      <div class="presta-content">
+        <div class="presta-tag">Spécialité n°2</div>
+        <div class="presta-titre">Diagnostic Réseaux</div>
+        <p class="presta-desc">Localisation précise de vos réseaux enterrés avant tout travaux de terrassement, pour intervenir en toute sécurité et éviter les accidents.</p>
+        <ul class="presta-liste">
+          <li>Réseaux eau</li>
+          <li>Réseaux gaz</li>
+          <li>Électricité enterrée</li>
+          <li>Assainissement</li>
+          <li>Fibre / télécom</li>
+          <li>Rapport écrit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="prestations-photos-placeholder">
+    <div class="placeholder-box">
+      📸 <strong>Galerie photos de chantiers à venir</strong><br>
+      Les photos de vos réalisations seront intégrées ici une fois transmises.<br>
+      <em style="font-size:0.8rem;">Formats acceptés : JPG, PNG — haute qualité recommandée</em>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     TERRASSEMENT (détail)
+══════════════════════════════ -->
+<div id="section-terrassement" class="page-section">
+  <div class="detail-hero">
+    <div class="detail-hero-bg"></div>
+    <div class="detail-hero-content">
+      <div class="section-eyebrow">Spécialité</div>
+      <h2 class="section-title">Terrassement</h2>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-text">
+      <p>Le terrassement est la première étape indispensable de tout projet de construction ou d'aménagement extérieur. TP Joset intervient avec des engins adaptés à la taille de votre chantier pour préparer votre terrain dans les règles de l'art.</p>
+      <p>Grâce à notre expérience de plus de 15 ans dans le secteur, nous maîtrisons toutes les techniques de terrassement pour les particuliers, des petits jardins aux grands terrains agricoles.</p>
+      <ul class="detail-points">
+        <li>Décaissement et déblaiement de terrain</li>
+        <li>Nivellement et mise à niveau</li>
+        <li>Réalisation de fondations (filantes, radier)</li>
+        <li>Remblai et compactage</li>
+        <li>Construction de murs de soutènement</li>
+        <li>Création de voiries et accès privés</li>
+        <li>Drainage et gestion des eaux pluviales</li>
+        <li>Pose de dalles béton (garage, terrasse)</li>
+      </ul>
+    </div>
+    <div class="detail-image">
+      <img src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80" alt="Chantier terrassement TP Joset" />
+    </div>
+  </div>
+  <div class="detail-cta-bar">
+    <p>Un projet de terrassement ? Contactez-nous pour un devis gratuit.</p>
+    <a href="#" class="btn-blanc nav-link" data-section="devis" style="border-color:rgba(255,255,255,0.6);">Obtenir un devis →</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     DIAGNOSTIC RÉSEAUX (détail)
+══════════════════════════════ -->
+<div id="section-diagnostic" class="page-section">
+  <div class="detail-hero">
+    <div class="detail-hero-bg diag-hero-bg"></div>
+    <div class="detail-hero-content">
+      <div class="section-eyebrow">Spécialité</div>
+      <h2 class="section-title">Diagnostic Réseaux</h2>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-text">
+      <p>Le diagnostic réseaux consiste à localiser et cartographier tous les réseaux enterrés présents sur votre terrain avant d'entreprendre des travaux de terrassement. C'est une étape <strong>obligatoire</strong> depuis la loi anti-endommagement de 2012 (DT-DICT).</p>
+      <p>TP Joset réalise ces diagnostics avec du matériel de détection professionnel, garantissant une précision maximale pour la sécurité de votre chantier et de nos équipes.</p>
+      <ul class="detail-points">
+        <li>Localisation des canalisations d'eau et de gaz</li>
+        <li>Détection des réseaux électriques enterrés</li>
+        <li>Inspection des réseaux d'assainissement</li>
+        <li>Détection des câbles fibre optique et télécom</li>
+        <li>Cartographie précise des réseaux</li>
+        <li>Remise d'un rapport écrit avec plan</li>
+        <li>Marquage au sol des réseaux détectés</li>
+      </ul>
+    </div>
+    <div class="detail-image">
+      <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80" alt="Diagnostic réseaux TP Joset" />
+    </div>
+  </div>
+
+  <div class="diag-steps">
+    <div class="section-eyebrow">Comment ça se passe ?</div>
+    <h3 class="section-title">Les étapes du diagnostic</h3>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-titre">Demande de devis</div>
+        <p class="step-desc">Vous nous contactez avec l'adresse et la surface du terrain. Nous établissons un devis gratuit.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-titre">Intervention sur site</div>
+        <p class="step-desc">Notre technicien se déplace avec le matériel de détection pour scanner l'ensemble de la zone.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-titre">Marquage au sol</div>
+        <p class="step-desc">Les réseaux détectés sont marqués au sol selon le code couleur réglementaire.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-titre">Rapport remis</div>
+        <p class="step-desc">Vous recevez un rapport écrit avec le plan des réseaux, utilisable pour votre dossier de travaux.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-cta-bar">
+    <p>Besoin d'un diagnostic avant vos travaux ?</p>
+    <a href="#" class="btn-blanc nav-link" data-section="devis" style="border-color:rgba(255,255,255,0.6);">Obtenir un devis →</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     AVIS CLIENTS
+══════════════════════════════ -->
+<div id="section-avis" class="page-section">
+  <div class="avis-content">
+    <div class="section-eyebrow">Ce que disent nos clients</div>
+    <h2 class="section-title">Avis Clients</h2>
+
+    <div class="avis-vide">
+      <div class="avis-vide-icon">⭐</div>
+      <div class="stars-display">★★★★★</div>
+      <h3>Partagez votre expérience</h3>
+      <p>Vous avez fait appel à TP Joset pour vos travaux ? Votre avis est précieux pour nous et pour les futurs clients. Déposez votre avis directement sur Google en cliquant ci-dessous.</p>
+      <a href="https://search.google.com/local/writereview?placeid=ChIJ_TP_JOSET_PLACEHOLDER" target="_blank" class="btn-rouge" style="display:inline-flex;align-items:center;gap:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Laisser un avis Google
+      </a>
+      <p style="margin-top:20px;font-size:0.78rem;color:var(--gris-clair);">Les avis seront visibles directement sur votre fiche Google Business.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     OÙ NOUS TROUVER (CARTE)
+══════════════════════════════ -->
+<div id="section-carte" class="page-section">
+  <div class="carte-content">
+    <div class="section-eyebrow">Zone d'intervention</div>
+    <h2 class="section-title">Où nous trouver</h2>
+    <p style="color:var(--gris);font-size:0.92rem;margin-top:8px;">TP Joset est basé à <strong>Charquemont (25140)</strong> dans le Doubs et intervient dans un rayon de 20 km autour de son siège.</p>
+    <div id="map"></div>
+  </div>
+  <div class="carte-legende">
+    <div class="legende-item"><div class="legende-dot"></div> Siège TP Joset — Charquemont (25140)</div>
+    <div class="legende-item"><div class="legende-cercle"></div> Zone d'intervention (rayon 20 km)</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     OBTENIR UN DEVIS
+══════════════════════════════ -->
+<div id="section-devis" class="page-section">
+  <div class="devis-wrapper">
+    <div class="devis-left">
+      <div class="section-eyebrow">Réponse sous 48h</div>
+      <h2 class="section-title">Devis<br>Gratuit</h2>
+      <p>Décrivez votre projet et nous vous recontactons rapidement pour convenir d'un rendez-vous sur site. L'estimation est entièrement gratuite et sans engagement.</p>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div>
+          <div class="contact-item-label">Téléphone</div>
+          <div class="contact-item-val">06 XX XX XX XX</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📧</div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-val">contact@tp-joset.fr</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <div class="contact-item-label">Siège</div>
+          <div class="contact-item-val">Charquemont, 25140 (Doubs)</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div>
+          <div class="contact-item-label">Horaires</div>
+          <div class="contact-item-val">Lun – Ven : 7h00 – 18h00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="devis-right">
+      <div class="section-eyebrow">Formulaire</div>
+      <h3 class="section-title" style="font-size:1.8rem;margin-bottom:32px;">Votre projet</h3>
+
+      <!-- Message confirmation (caché par défaut) -->
+      <div id="devis-succes" style="display:none;background:#f0faf0;border:2px solid #2e7d32;padding:28px;text-align:center;margin-bottom:24px;">
+        <div style="font-size:2rem;margin-bottom:10px;">✅</div>
+        <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:#2e7d32;margin-bottom:6px;">Demande envoyée avec succès !</div>
+        <div style="font-size:0.88rem;color:#4A4A4A;">Vous allez recevoir un email de confirmation. TP Joset vous recontactera sous 48h.</div>
+      </div>
+      <div id="devis-erreur" style="display:none;background:#fff0f0;border:2px solid #CC1414;padding:20px;text-align:center;margin-bottom:24px;">
+        <div style="font-size:1.8rem;margin-bottom:8px;">⚠️</div>
+        <div style="font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;color:#CC1414;margin-bottom:4px;">Erreur d'envoi</div>
+        <div style="font-size:0.85rem;color:#4A4A4A;">Veuillez réessayer ou nous contacter directement par téléphone.</div>
+      </div>
+
+      <div id="devis-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Prénom *</label>
+            <input id="f-prenom" class="form-input" type="text" placeholder="Jean" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom *</label>
+            <input id="f-nom" class="form-input" type="text" placeholder="Dupont" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Téléphone *</label>
+            <input id="f-tel" class="form-input" type="tel" placeholder="06 XX XX XX XX" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input id="f-email" class="form-input" type="email" placeholder="jean@email.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type de prestation *</label>
+          <select id="f-prestation" class="form-select">
+            <option value="">— Sélectionnez —</option>
+            <option>Terrassement</option>
+            <option>Diagnostic Réseaux</option>
+            <option>Les deux</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Commune des travaux</label>
+          <input id="f-commune" class="form-input" type="text" placeholder="Ex : Maîche, Morteau, Pontarlier…" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description de votre projet *</label>
+          <textarea id="f-desc" class="form-textarea" placeholder="Décrivez votre projet : surface approximative, nature des travaux, contraintes particulières…"></textarea>
+        </div>
+        <button id="btn-envoyer" class="btn-rouge" type="button" onclick="envoyerDevis()" style="width:100%;font-size:1rem;padding:16px;border:none;cursor:pointer;margin-top:4px;">
+          Envoyer ma demande de devis →
+        </button>
+        <p style="font-size:0.75rem;color:var(--gris-clair);margin-top:12px;text-align:center;">* Champs obligatoires — Réponse garantie sous 48h</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     FOOTER
+══════════════════════════════ -->
+<footer style="background:var(--noir);border-top:3px solid var(--rouge);padding:28px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:1.3rem;color:var(--blanc);">TP <span style="color:var(--rouge);">JOSET</span></div>
+  <div style="font-size:0.78rem;color:var(--gris-clair);">© 2025 TP Joset – Charquemont (25) – Tous droits réservés</div>
+  <div style="display:flex;gap:20px;">
+    <a href="#" style="font-size:0.78rem;color:var(--gris-clair);text-decoration:none;">Mentions légales</a>
+    <a href="#" style="font-size:0.78rem;color:var(--gris-clair);text-decoration:none;">Confidentialité</a>
+  </div>
+</footer>
+
+<script>
+  // ══════════════════════════════════════════════════
+  // ── FORMSPREE — ENVOI D'EMAILS ──
+  // ══════════════════════════════════════════════════
+  // ACTIVATION EN 2 MINUTES :
+  //
+  // 1. Va sur https://formspree.io et crée un compte gratuit (avec marleyherbelin@gmail.com)
+  // 2. Clique "New Form" → donne-lui un nom ex: "Devis TP Joset"
+  // 3. Formspree te donne une URL du type : https://formspree.io/f/XXXXXXXX
+  // 4. Copie le code XXXXXXXX et remplace VOTRE_CODE_FORMSPREE ci-dessous
+  // 5. Confirme ton email via le mail que Formspree t'envoie → c'est bon !
+  //
+  // Tu recevras tous les devis sur marleyherbelin@gmail.com
+  // Le client reçoit automatiquement un email de confirmation
+  // ══════════════════════════════════════════════════
+
+  const FORMSPREE_ID = 'xnjepjkb';
+
+  async function envoyerDevis() {
+    const prenom     = document.getElementById('f-prenom').value.trim();
+    const nom        = document.getElementById('f-nom').value.trim();
+    const tel        = document.getElementById('f-tel').value.trim();
+    const email      = document.getElementById('f-email').value.trim();
+    const prestation = document.getElementById('f-prestation').value;
+    const commune    = document.getElementById('f-commune').value.trim();
+    const desc       = document.getElementById('f-desc').value.trim();
+
+    // Validation
+    if (!prenom || !nom || !tel || !email || !prestation || !desc) {
+      alert('Merci de remplir tous les champs obligatoires (*).');
+      return;
+    }
+
+    const btn = document.getElementById('btn-envoyer');
+    btn.textContent = 'Envoi en cours…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          // Champ spécial Formspree : email de réponse automatique au client
+          _replyto: email,
+          // Sujet du mail reçu par le chef
+          _subject: '📋 Nouveau devis – ' + prenom + ' ' + nom + ' (' + prestation + ')',
+          // Données du formulaire
+          'Prénom': prenom,
+          'Nom': nom,
+          'Téléphone': tel,
+          'Email client': email,
+          'Prestation demandée': prestation,
+          'Commune des travaux': commune || 'Non précisée',
+          'Description du projet': desc
+        })
+      });
+
+      if (res.ok) {
+        document.getElementById('devis-form').style.display = 'none';
+        document.getElementById('devis-succes').style.display = 'block';
+        document.getElementById('devis-erreur').style.display = 'none';
+      } else {
+        throw new Error('Réponse non OK');
+      }
+    } catch (err) {
+      console.error('Formspree error:', err);
+      document.getElementById('devis-erreur').style.display = 'block';
+      btn.textContent = 'Envoyer ma demande de devis →';
+      btn.disabled = false;
+    }
+  }
+
+  // ── NAVIGATION SPA ──
+  function showSection(id) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+    const sec = document.getElementById('section-' + id);
+    if (sec) sec.classList.add('active');
+    document.querySelectorAll('[data-section="' + id + '"]').forEach(a => a.classList.add('active'));
+    window.scrollTo(0, 0);
+    if (id === 'carte') initMap();
+  }
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      showSection(this.dataset.section);
+    });
+  });
+
+  // ── CARTE LEAFLET ──
+  let mapInitialized = false;
+
+  function initMap() {
+    if (mapInitialized) return;
+    mapInitialized = true;
+
+    // Coordonnées de Charquemont (25140)
+    const lat = 47.2147;
+    const lng = 6.8567;
+
+    const map = L.map('map').setView([lat, lng], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(map);
+
+    // Marqueur entreprise
+    const icon = L.divIcon({
+      className: '',
+      html: '<div style="background:#CC1414;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);"></div>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+
+    L.marker([lat, lng], { icon })
+      .addTo(map)
+      .bindPopup('<strong style="font-family:Oswald,sans-serif;font-size:1rem;">TP JOSET</strong><br>Charquemont (25140)<br><em style="font-size:0.8rem;color:#666;">Terrassement & Diagnostic Réseaux</em>')
+      .openPopup();
+
+    // Cercle 20 km
+    L.circle([lat, lng], {
+      radius: 20000,
+      color: '#CC1414',
+      fillColor: '#CC1414',
+      fillOpacity: 0.08,
+      weight: 2,
+      dashArray: '6 4'
+    }).addTo(map);
+  }
+</script>
+</body>
+</html>
