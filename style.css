@@ -795,3 +795,212 @@
       .hstat { padding: 14px 20px; }
       .prestations-photos-placeholder { padding: 40px 24px; }
     }
+
+/* ══════════════════════════════
+   ESTIMATION RAPIDE
+══════════════════════════════ */
+#section-estimation { background: var(--blanc); }
+
+.estimation-content { padding: 80px; }
+
+.estim-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.estim-form {
+  background: var(--gris-bg);
+  padding: 36px;
+  border-left: 4px solid var(--rouge);
+}
+
+.estim-resultat {
+  background: var(--noir);
+  padding: 36px;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.estim-resultat-vide {
+  text-align: center;
+  color: var(--gris-clair);
+  font-size: 0.9rem;
+}
+
+.estim-prix {
+  text-align: center;
+  width: 100%;
+}
+
+.estim-prix-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gris-clair);
+  margin-bottom: 12px;
+}
+
+.estim-prix-valeur {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: var(--rouge);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.estim-prix-detail {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 28px;
+}
+
+.estim-disclaimer {
+  margin-top: 32px;
+  font-size: 0.8rem;
+  color: var(--gris);
+  background: #FFF8E1;
+  border-left: 4px solid #FFB800;
+  padding: 14px 18px;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════
+   SUIVI DE CHANTIER
+══════════════════════════════ */
+#section-suivi { background: var(--gris-bg); }
+
+.suivi-content { padding: 80px; }
+
+.suivi-recherche {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+#suivi-resultat {
+  margin-top: 40px;
+  background: var(--blanc);
+  padding: 40px;
+  border-top: 4px solid var(--rouge);
+}
+
+.suivi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.suivi-chantier-nom {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+.suivi-chantier-lieu {
+  font-size: 0.85rem;
+  color: var(--gris);
+  margin-top: 2px;
+}
+
+.suivi-progress-badge {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--rouge);
+}
+
+.suivi-barre-container {
+  height: 12px;
+  background: var(--gris-bg);
+  overflow: hidden;
+  margin-bottom: 36px;
+}
+
+.suivi-barre {
+  height: 100%;
+  background: var(--rouge);
+  width: 0%;
+  transition: width 1s ease;
+}
+
+.suivi-etapes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.suivi-etape {
+  display: flex;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  align-items: flex-start;
+}
+
+.suivi-etape:last-child { border-bottom: none; }
+
+.suivi-etape-icone {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.suivi-etape.fait .suivi-etape-icone { background: #E8F5E9; color: #2e7d32; }
+.suivi-etape.encours .suivi-etape-icone { background: #FFF3E0; color: #E65100; }
+.suivi-etape.avenir .suivi-etape-icone { background: var(--gris-bg); color: var(--gris-clair); }
+
+.suivi-etape-titre {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.suivi-etape.avenir .suivi-etape-titre { color: var(--gris-clair); }
+
+.suivi-etape-desc {
+  font-size: 0.82rem;
+  color: var(--gris);
+  margin-top: 2px;
+}
+
+.suivi-etape-date {
+  font-size: 0.75rem;
+  color: var(--gris-clair);
+  margin-left: auto;
+  flex-shrink: 0;
+  padding-top: 6px;
+}
+
+.suivi-erreur {
+  margin-top: 24px;
+  background: #fff0f0;
+  border: 2px solid var(--rouge);
+  padding: 18px 24px;
+  font-size: 0.9rem;
+  color: var(--rouge);
+  max-width: 480px;
+}
+
+@media (max-width: 900px) {
+  .estimation-content, .suivi-content { padding: 48px 24px; }
+  .estim-wrapper { grid-template-columns: 1fr; }
+}

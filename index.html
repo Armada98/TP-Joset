@@ -27,6 +27,8 @@
     <a href="#" class="nav-link" data-section="terrassement">Terrassement</a>
     <a href="#" class="nav-link" data-section="diagnostic">Diagnostic Réseaux</a>
     <a href="#" class="nav-link" data-section="avis">Avis Clients</a>
+    <a href="#" class="nav-link" data-section="estimation">Estimation</a>
+    <a href="#" class="nav-link" data-section="suivi">Suivi Chantier</a>
     <a href="#" class="nav-link" data-section="carte">Où nous trouver</a>
     <a href="#" class="nav-link nav-devis" data-section="devis">📋 Obtenir un devis</a>
   </nav>
@@ -51,19 +53,19 @@
     </div>
     <div class="hero-stats-bar">
       <div class="hstat">
-        <div class="hstat-num">15+</div>
+        <div class="hstat-num"><span class="count-up" data-target="15">0</span>+</div>
         <div class="hstat-label">Ans d'expérience</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num">300+</div>
+        <div class="hstat-num"><span class="count-up" data-target="300">0</span>+</div>
         <div class="hstat-label">Chantiers réalisés</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num">20 km</div>
+        <div class="hstat-num"><span class="count-up" data-target="20">0</span> km</div>
         <div class="hstat-label">Rayon d'intervention</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num">100%</div>
+        <div class="hstat-num"><span class="count-up" data-target="100">0</span>%</div>
         <div class="hstat-label">Devis gratuits</div>
       </div>
     </div>
@@ -269,6 +271,91 @@
         Laisser un avis Google
       </a>
       <p style="margin-top:20px;font-size:0.78rem;color:var(--gris-clair);">Les avis seront visibles directement sur votre fiche Google Business.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     ESTIMATION RAPIDE
+══════════════════════════════ -->
+<div id="section-estimation" class="page-section">
+  <div class="estimation-content">
+    <div class="section-eyebrow">Calculateur</div>
+    <h2 class="section-title">Estimation Rapide</h2>
+    <p style="color:var(--gris);font-size:0.92rem;max-width:560px;">Obtenez une fourchette de prix indicative en quelques clics. Cette estimation est donnée à titre informatif — le devis précis et gratuit reste établi après visite sur site.</p>
+
+    <div class="estim-wrapper">
+      <div class="estim-form">
+        <div class="form-group">
+          <label class="form-label">Type de travaux</label>
+          <select id="estim-type" class="form-select" onchange="calculerEstimation()">
+            <option value="">— Sélectionnez —</option>
+            <option value="terrassement">Terrassement / décaissement</option>
+            <option value="fondations">Fondations</option>
+            <option value="drainage">Drainage</option>
+            <option value="voirie">Voirie / accès privé</option>
+            <option value="diagnostic">Diagnostic réseaux</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Surface approximative (m²)</label>
+          <input id="estim-surface" class="form-input" type="number" min="1" placeholder="Ex : 150" oninput="calculerEstimation()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Accès au terrain</label>
+          <select id="estim-acces" class="form-select" onchange="calculerEstimation()">
+            <option value="facile">Facile (engins accessibles)</option>
+            <option value="moyen">Moyen (accès étroit)</option>
+            <option value="difficile">Difficile (pente, obstacles)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="estim-resultat" id="estim-resultat">
+        <div class="estim-resultat-vide">
+          <div style="font-size:2.5rem;margin-bottom:12px;">🧮</div>
+          <p>Remplissez les champs pour voir votre estimation</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="estim-disclaimer">⚠️ Estimation indicative uniquement. Les prix réels dépendent de la nature du sol, de l'accessibilité et des spécificités de votre projet. Demandez un devis gratuit pour un chiffrage précis.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SUIVI DE CHANTIER
+══════════════════════════════ -->
+<div id="section-suivi" class="page-section">
+  <div class="suivi-content">
+    <div class="section-eyebrow">Espace client</div>
+    <h2 class="section-title">Suivi de Chantier</h2>
+    <p style="color:var(--gris);font-size:0.92rem;max-width:560px;">Vous avez un chantier en cours avec TP Joset ? Entrez le code de suivi qui vous a été remis pour consulter l'avancement de vos travaux.</p>
+
+    <div class="suivi-recherche">
+      <input id="suivi-code" class="form-input" type="text" placeholder="Ex : TPJ-2025-001" style="max-width:280px;text-transform:uppercase;" />
+      <button class="btn-rouge" type="button" onclick="chercherChantier()" style="border:none;cursor:pointer;">Consulter →</button>
+    </div>
+    <p style="font-size:0.78rem;color:var(--gris-clair);margin-top:8px;">💡 Pour la démo, essayez le code : <strong>TPJ-2025-001</strong> ou <strong>TPJ-2025-002</strong></p>
+
+    <div id="suivi-resultat" style="display:none;">
+      <div class="suivi-header">
+        <div>
+          <div class="suivi-chantier-nom" id="suivi-nom"></div>
+          <div class="suivi-chantier-lieu" id="suivi-lieu"></div>
+        </div>
+        <div class="suivi-progress-badge" id="suivi-pct"></div>
+      </div>
+
+      <div class="suivi-barre-container">
+        <div class="suivi-barre" id="suivi-barre"></div>
+      </div>
+
+      <div class="suivi-etapes" id="suivi-etapes"></div>
+    </div>
+
+    <div id="suivi-introuvable" style="display:none;" class="suivi-erreur">
+      ❌ Code introuvable. Vérifiez le code remis par TP Joset ou contactez-nous.
     </div>
   </div>
 </div>
