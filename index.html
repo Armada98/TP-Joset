@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TP Joset – Terrassement & Diagnostic Réseaux – Charquemont (25)</title>
+  <title>Joset TP – Terrassement & Diagnostic Réseaux – Charquemont (25)</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,10 +16,8 @@
 ══════════════════════════════ -->
 <div id="navbar">
   <div class="nav-top">
-    <div>
-      <div class="nav-logo-text">TP JOSET</div>
-      <div class="nav-logo-sub">Terrassement & Diagnostic Réseaux — Charquemont (25)</div>
-    </div>
+    <img src="logo.png" alt="Joset TP – Terrassement, VRD, Aménagement" class="nav-logo-img" />
+    <div class="nav-logo-sub">Charquemont (25) — Devis gratuit sous 48h</div>
   </div>
   <nav class="nav-bar">
     <a href="#" class="nav-link active" data-section="accueil"><span class="nav-icon">🏠</span> Accueil</a>
@@ -42,7 +40,7 @@
       <div class="hero-badge">📍 Charquemont – Doubs (25)</div>
       <h1 class="hero-title">Terrassement &<br><span>Diagnostic Réseaux</span></h1>
       <p class="hero-sub">
-        TP Joset intervient chez les particuliers pour tous vos travaux extérieurs : terrassement, nivellement, fondations et diagnostic de réseaux enterrés. Devis gratuit sous 48h.
+        Joset TP intervient chez les particuliers pour tous vos travaux extérieurs : terrassement, nivellement, fondations et diagnostic de réseaux enterrés. Devis gratuit sous 48h.
       </p>
       <div class="hero-btns">
         <a href="#" class="btn-rouge nav-link" data-section="devis">Demander un devis gratuit</a>
@@ -51,19 +49,19 @@
     </div>
     <div class="hero-stats-bar">
       <div class="hstat">
-        <div class="hstat-num">15+</div>
+        <div class="hstat-num"><span class="count-up" data-target="15">0</span>+</div>
         <div class="hstat-label">Ans d'expérience</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num">300+</div>
+        <div class="hstat-num"><span class="count-up" data-target="300">0</span>+</div>
         <div class="hstat-label">Chantiers réalisés</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num">20 km</div>
+        <div class="hstat-num"><span class="count-up" data-target="20">0</span> km</div>
         <div class="hstat-label">Rayon d'intervention</div>
       </div>
       <div class="hstat">
-        <div class="hstat-num">100%</div>
+        <div class="hstat-num"><span class="count-up" data-target="100">0</span>%</div>
         <div class="hstat-label">Devis gratuits</div>
       </div>
     </div>
@@ -101,12 +99,12 @@
   <div class="prestations-intro">
     <div class="section-eyebrow">Nos domaines</div>
     <h2 class="section-title">Nos spécialités</h2>
-    <p>TP Joset est spécialisé dans deux domaines complémentaires des travaux extérieurs pour les particuliers. Découvrez nos prestations en détail.</p>
+    <p>Joset TP est spécialisé dans deux domaines complémentaires des travaux extérieurs pour les particuliers. Découvrez nos prestations en détail.</p>
   </div>
 
   <div class="prestations-grid">
     <div class="presta-card">
-      <div class="presta-bg" style="background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&q=80');"></div>
+      <div class="presta-bg" style="background-image: url('photos/terrassement-pelle.jpg');"></div>
       <div class="presta-overlay"></div>
       <div class="presta-content">
         <div class="presta-tag">Spécialité n°1</div>
@@ -123,7 +121,7 @@
       </div>
     </div>
     <div class="presta-card">
-      <div class="presta-bg" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80');"></div>
+      <div class="presta-bg" style="background-image: url('photos/diagnostic-camera.jpg');"></div>
       <div class="presta-overlay"></div>
       <div class="presta-content">
         <div class="presta-tag">Spécialité n°2</div>
@@ -141,11 +139,36 @@
     </div>
   </div>
 
-  <div class="prestations-photos-placeholder">
-    <div class="placeholder-box">
-      📸 <strong>Galerie photos de chantiers à venir</strong><br>
-      Les photos de vos réalisations seront intégrées ici une fois transmises.<br>
-      <em style="font-size:0.8rem;">Formats acceptés : JPG, PNG — haute qualité recommandée</em>
+  <div class="realisations-galerie">
+    <div class="galerie-intro">
+      <div class="section-eyebrow">Nos réalisations</div>
+      <h2 class="section-title">Quelques chantiers</h2>
+    </div>
+    <div class="galerie-grid">
+      <div class="galerie-item">
+        <img src="photos/amenagement-muret.jpg" alt="Muret en pierre et terrasse dallée" loading="lazy" />
+        <div class="galerie-legende">Muret en pierre & terrasse dallée</div>
+      </div>
+      <div class="galerie-item">
+        <img src="photos/terrassement-pelle.jpg" alt="Terrassement et pose de bordures" loading="lazy" />
+        <div class="galerie-legende">Terrassement & pose de bordures</div>
+      </div>
+      <div class="galerie-item">
+        <img src="photos/amenagement-cour.jpg" alt="Cour goudronnée avec muret" loading="lazy" />
+        <div class="galerie-legende">Cour enrobée & muret de soutènement</div>
+      </div>
+      <div class="galerie-item">
+        <img src="photos/diagnostic-tranchee.jpg" alt="Réseau d'assainissement enterré" loading="lazy" />
+        <div class="galerie-legende">Pose de réseau d'assainissement</div>
+      </div>
+      <div class="galerie-item">
+        <img src="photos/terrassement-talus.jpg" alt="Aménagement extérieur et talus" loading="lazy" />
+        <div class="galerie-legende">Aménagement extérieur & escalier</div>
+      </div>
+      <div class="galerie-item">
+        <img src="photos/diagnostic-camera.jpg" alt="Inspection caméra de canalisation" loading="lazy" />
+        <div class="galerie-legende">Inspection caméra des canalisations</div>
+      </div>
     </div>
   </div>
 </div>
@@ -164,7 +187,7 @@
 
   <div class="detail-body">
     <div class="detail-text">
-      <p>Le terrassement est la première étape indispensable de tout projet de construction ou d'aménagement extérieur. TP Joset intervient avec des engins adaptés à la taille de votre chantier pour préparer votre terrain dans les règles de l'art.</p>
+      <p>Le terrassement est la première étape indispensable de tout projet de construction ou d'aménagement extérieur. Joset TP intervient avec des engins adaptés à la taille de votre chantier pour préparer votre terrain dans les règles de l'art.</p>
       <p>Grâce à notre expérience de plus de 15 ans dans le secteur, nous maîtrisons toutes les techniques de terrassement pour les particuliers, des petits jardins aux grands terrains agricoles.</p>
       <ul class="detail-points">
         <li>Décaissement et déblaiement de terrain</li>
@@ -178,7 +201,7 @@
       </ul>
     </div>
     <div class="detail-image">
-      <img src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80" alt="Chantier terrassement TP Joset" />
+      <img src="photos/terrassement-talus.jpg" alt="Chantier terrassement Joset TP" />
     </div>
   </div>
   <div class="detail-cta-bar">
@@ -202,7 +225,7 @@
   <div class="detail-body">
     <div class="detail-text">
       <p>Le diagnostic réseaux consiste à localiser et cartographier tous les réseaux enterrés présents sur votre terrain avant d'entreprendre des travaux de terrassement. C'est une étape <strong>obligatoire</strong> depuis la loi anti-endommagement de 2012 (DT-DICT).</p>
-      <p>TP Joset réalise ces diagnostics avec du matériel de détection professionnel, garantissant une précision maximale pour la sécurité de votre chantier et de nos équipes.</p>
+      <p>Joset TP réalise ces diagnostics avec du matériel de détection professionnel, garantissant une précision maximale pour la sécurité de votre chantier et de nos équipes.</p>
       <ul class="detail-points">
         <li>Localisation des canalisations d'eau et de gaz</li>
         <li>Détection des réseaux électriques enterrés</li>
@@ -214,7 +237,7 @@
       </ul>
     </div>
     <div class="detail-image">
-      <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80" alt="Diagnostic réseaux TP Joset" />
+      <img src="photos/diagnostic-tranchee.jpg" alt="Diagnostic réseaux Joset TP" />
     </div>
   </div>
 
@@ -263,7 +286,7 @@
       <div class="avis-vide-icon">⭐</div>
       <div class="stars-display">★★★★★</div>
       <h3>Partagez votre expérience</h3>
-      <p>Vous avez fait appel à TP Joset pour vos travaux ? Votre avis est précieux pour nous et pour les futurs clients. Déposez votre avis directement sur Google en cliquant ci-dessous.</p>
+      <p>Vous avez fait appel à Joset TP pour vos travaux ? Votre avis est précieux pour nous et pour les futurs clients. Déposez votre avis directement sur Google en cliquant ci-dessous.</p>
       <a href="https://search.google.com/local/writereview?placeid=ChIJ_TP_JOSET_PLACEHOLDER" target="_blank" class="btn-rouge" style="display:inline-flex;align-items:center;gap:8px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
         Laisser un avis Google
@@ -280,11 +303,11 @@
   <div class="carte-content">
     <div class="section-eyebrow">Zone d'intervention</div>
     <h2 class="section-title">Où nous trouver</h2>
-    <p style="color:var(--gris);font-size:0.92rem;margin-top:8px;">TP Joset est basé à <strong>Charquemont (25140)</strong> dans le Doubs et intervient dans un rayon de 20 km autour de son siège.</p>
+    <p style="color:var(--gris);font-size:0.92rem;margin-top:8px;">Joset TP est basé à <strong>Charquemont (25140)</strong> dans le Doubs et intervient dans un rayon de 20 km autour de son siège.</p>
     <div id="map"></div>
   </div>
   <div class="carte-legende">
-    <div class="legende-item"><div class="legende-dot"></div> Siège TP Joset — Charquemont (25140)</div>
+    <div class="legende-item"><div class="legende-dot"></div> Siège Joset TP — 4 rue Lamarck, 25140 Charquemont</div>
     <div class="legende-item"><div class="legende-cercle"></div> Zone d'intervention (rayon 20 km)</div>
   </div>
 </div>
@@ -317,7 +340,7 @@
         <div class="contact-item-icon">📍</div>
         <div>
           <div class="contact-item-label">Siège</div>
-          <div class="contact-item-val">Charquemont, 25140 (Doubs)</div>
+          <div class="contact-item-val">4 rue Lamarck, 25140 Charquemont</div>
         </div>
       </div>
       <div class="contact-item">
@@ -337,11 +360,11 @@
       <div id="devis-succes" style="display:none;background:#f0faf0;border:2px solid #2e7d32;padding:28px;text-align:center;margin-bottom:24px;">
         <div style="font-size:2rem;margin-bottom:10px;">✅</div>
         <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;color:#2e7d32;margin-bottom:6px;">Demande envoyée avec succès !</div>
-        <div style="font-size:0.88rem;color:#4A4A4A;">Vous allez recevoir un email de confirmation. TP Joset vous recontactera sous 48h.</div>
+        <div style="font-size:0.88rem;color:#4A4A4A;">Vous allez recevoir un email de confirmation. Joset TP vous recontactera sous 48h.</div>
       </div>
-      <div id="devis-erreur" style="display:none;background:#fff0f0;border:2px solid #CC1414;padding:20px;text-align:center;margin-bottom:24px;">
+      <div id="devis-erreur" style="display:none;background:#fff0f0;border:2px solid #E87422;padding:20px;text-align:center;margin-bottom:24px;">
         <div style="font-size:1.8rem;margin-bottom:8px;">⚠️</div>
-        <div style="font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;color:#CC1414;margin-bottom:4px;">Erreur d'envoi</div>
+        <div style="font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;color:#E87422;margin-bottom:4px;">Erreur d'envoi</div>
         <div style="font-size:0.85rem;color:#4A4A4A;">Veuillez réessayer ou nous contacter directement par téléphone.</div>
       </div>
 
@@ -394,14 +417,69 @@
 </div>
 
 <!-- ══════════════════════════════
+     MENTIONS LÉGALES
+══════════════════════════════ -->
+<div id="section-mentions" class="page-section">
+  <div class="mentions-content">
+    <div class="section-eyebrow">Informations légales</div>
+    <h2 class="section-title">Mentions Légales</h2>
+    <p style="color:var(--gris);font-size:0.85rem;margin-bottom:8px;font-style:italic;">⚠️ Modèle à compléter avec les informations réelles de l'entreprise (SIRET, forme juridique, hébergeur…) avant la mise en ligne définitive.</p>
+
+    <div class="mentions-bloc">
+      <h3 class="mentions-titre">Éditeur du site</h3>
+      <p>Le présent site est édité par :<br>
+      <strong>Joset TP</strong> — Terrassement, VRD, Aménagement<br>
+      Adresse : 4 rue Lamarck, 25140 Charquemont, France<br>
+      Téléphone : 06 XX XX XX XX<br>
+      Email : contact@tp-joset.fr<br>
+      Forme juridique : [à compléter — ex : SARL, EI, auto-entrepreneur]<br>
+      Capital social : [à compléter le cas échéant]<br>
+      SIRET : [à compléter]<br>
+      Numéro de TVA intracommunautaire : [à compléter]<br>
+      Responsable de la publication : [Nom du gérant]</p>
+    </div>
+
+    <div class="mentions-bloc">
+      <h3 class="mentions-titre">Hébergement</h3>
+      <p>Ce site est hébergé par :<br>
+      GitHub Pages — GitHub, Inc.<br>
+      88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis<br>
+      <em style="font-size:0.85rem;color:var(--gris-clair);">(À adapter si le site est déplacé vers un autre hébergeur.)</em></p>
+    </div>
+
+    <div class="mentions-bloc">
+      <h3 class="mentions-titre">Propriété intellectuelle</h3>
+      <p>L'ensemble des éléments présents sur ce site (textes, logo, images, mise en page) est la propriété de Joset TP, sauf mention contraire. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation écrite préalable, est interdite et constituerait une contrefaçon au sens des articles L.335-2 et suivants du Code de la propriété intellectuelle.</p>
+    </div>
+
+    <div class="mentions-bloc">
+      <h3 class="mentions-titre">Protection des données personnelles (RGPD)</h3>
+      <p>Les informations recueillies via le formulaire de demande de devis (nom, prénom, téléphone, email, description du projet) font l'objet d'un traitement destiné uniquement à répondre à votre demande. Elles sont transmises exclusivement à Joset TP et ne sont ni vendues, ni cédées à des tiers.</p>
+      <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi « Informatique et Libertés », vous disposez d'un droit d'accès, de rectification, d'opposition et de suppression des données vous concernant. Pour exercer ce droit, contactez-nous à l'adresse : contact@tp-joset.fr.</p>
+      <p>Les données transmises via le formulaire sont traitées par le service Formspree. Elles sont conservées le temps nécessaire au traitement de votre demande.</p>
+    </div>
+
+    <div class="mentions-bloc">
+      <h3 class="mentions-titre">Cookies</h3>
+      <p>Ce site utilise la cartographie OpenStreetMap (via Leaflet) pour afficher la zone d'intervention. La consultation du site n'implique pas de dépôt de cookies publicitaires ou de traçage. Les éventuels cookies techniques servent uniquement au bon fonctionnement de l'affichage.</p>
+    </div>
+
+    <div class="mentions-bloc">
+      <h3 class="mentions-titre">Responsabilité</h3>
+      <p>Joset TP s'efforce d'assurer l'exactitude des informations diffusées sur ce site. Les estimations de délais, prestations et zones d'intervention sont fournies à titre indicatif et ne constituent pas un engagement contractuel. Seul un devis signé fait foi.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
      FOOTER
 ══════════════════════════════ -->
-<footer style="background:var(--noir);border-top:3px solid var(--rouge);padding:28px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:1.3rem;color:var(--blanc);">TP <span style="color:var(--rouge);">JOSET</span></div>
-  <div style="font-size:0.78rem;color:var(--gris-clair);">© 2025 TP Joset – Charquemont (25) – Tous droits réservés</div>
+<footer style="background:var(--noir);border-top:3px solid var(--orange);padding:28px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:1.3rem;color:var(--blanc);">JOSET <span style="color:var(--orange);">TP</span></div>
+  <div style="font-size:0.78rem;color:var(--gris-clair);">© 2025 Joset TP – Charquemont (25) – Tous droits réservés</div>
   <div style="display:flex;gap:20px;">
-    <a href="#" style="font-size:0.78rem;color:var(--gris-clair);text-decoration:none;">Mentions légales</a>
-    <a href="#" style="font-size:0.78rem;color:var(--gris-clair);text-decoration:none;">Confidentialité</a>
+    <a href="#" class="nav-link" data-section="mentions" style="font-size:0.78rem;color:var(--gris-clair);text-decoration:none;">Mentions légales</a>
+    <a href="#" class="nav-link" data-section="mentions" style="font-size:0.78rem;color:var(--gris-clair);text-decoration:none;">Confidentialité</a>
   </div>
 </footer>
 

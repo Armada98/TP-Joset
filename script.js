@@ -4,7 +4,7 @@
   // ACTIVATION EN 2 MINUTES :
   //
   // 1. Va sur https://formspree.io et crée un compte gratuit (avec marleyherbelin@gmail.com)
-  // 2. Clique "New Form" → donne-lui un nom ex: "Devis TP Joset"
+  // 2. Clique "New Form" → donne-lui un nom ex: "Devis Joset TP"
   // 3. Formspree te donne une URL du type : https://formspree.io/f/XXXXXXXX
   // 4. Copie le code XXXXXXXX et remplace VOTRE_CODE_FORMSPREE ci-dessous
   // 5. Confirme ton email via le mail que Formspree t'envoie → c'est bon !
@@ -13,7 +13,7 @@
   // Le client reçoit automatiquement un email de confirmation
   // ══════════════════════════════════════════════════
 
-  const FORMSPREE_ID = 'xnjepjkb';
+  const FORMSPREE_ID = 'xlgqpqbo';
 
   async function envoyerDevis() {
     const prenom     = document.getElementById('f-prenom').value.trim();
@@ -94,37 +94,76 @@
     if (mapInitialized) return;
     mapInitialized = true;
 
-    // Coordonnées de Charquemont (25140)
-    const lat = 47.2147;
-    const lng = 6.8567;
+    // Coordonnées : 4 rue Lamarck, 25140 Charquemont
+    const lat = 47.21105;
+    const lng = 6.83430;
 
-    const map = L.map('map').setView([lat, lng], 11);
+    const map = L.map('map').setView([lat, lng], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 18
+      maxZoom: 19
     }).addTo(map);
 
     // Marqueur entreprise
     const icon = L.divIcon({
       className: '',
-      html: '<div style="background:#CC1414;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);"></div>',
+      html: '<div style="background:#E87422;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);"></div>',
       iconSize: [18, 18],
       iconAnchor: [9, 9]
     });
 
+    // Lien itinéraire Google Maps basé sur l'adresse texte (précis même si le point est approximatif)
+    const itineraire = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent('4 rue Lamarck, 25140 Charquemont');
+
     L.marker([lat, lng], { icon })
       .addTo(map)
-      .bindPopup('<strong style="font-family:Oswald,sans-serif;font-size:1rem;">TP JOSET</strong><br>Charquemont (25140)<br><em style="font-size:0.8rem;color:#666;">Terrassement & Diagnostic Réseaux</em>')
+      .bindPopup(
+        '<strong style="font-family:Oswald,sans-serif;font-size:1rem;">JOSET TP</strong><br>' +
+        '4 rue Lamarck<br>25140 Charquemont<br>' +
+        '<em style="font-size:0.8rem;color:#666;">Terrassement · VRD · Aménagement</em><br>' +
+        '<a href="' + itineraire + '" target="_blank" style="display:inline-block;margin-top:8px;background:#E87422;color:#fff;padding:5px 12px;border-radius:3px;text-decoration:none;font-family:Oswald,sans-serif;font-size:0.82rem;letter-spacing:0.05em;">🧭 Itinéraire</a>'
+      )
       .openPopup();
 
     // Cercle 20 km
     L.circle([lat, lng], {
       radius: 20000,
-      color: '#CC1414',
-      fillColor: '#CC1414',
+      color: '#E87422',
+      fillColor: '#E87422',
       fillOpacity: 0.08,
       weight: 2,
       dashArray: '6 4'
     }).addTo(map);
+
+    // Ajuster la vue pour montrer tout le cercle de 20 km
+    map.fitBounds(L.latLng(lat, lng).toBounds(44000));
   }
+
+// ══════════════════════════════════════════════════
+// ── ANIMATION DES CHIFFRES (compteurs) ──
+// ══════════════════════════════════════════════════
+let statsAnimated = false;
+
+function animerChiffres() {
+  if (statsAnimated) return;
+  statsAnimated = true;
+
+  document.querySelectorAll('.count-up').forEach(el => {
+    const target = parseInt(el.dataset.target, 10);
+    const duree = 1600; // ms
+    const debut = performance.now();
+
+    function step(now) {
+      const progression = Math.min((now - debut) / duree, 1);
+      // easing : démarre vite, ralentit à la fin
+      const eased = 1 - Math.pow(1 - progression, 3);
+      el.textContent = Math.round(eased * target);
+      if (progression < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// Lancer l'animation au chargement de la page (section accueil active par défaut)
+window.addEventListener('load', animerChiffres);
