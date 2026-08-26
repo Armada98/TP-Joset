@@ -1,0 +1,26 @@
+====================================================
+  SITE JOSET TP — DÉPLOIEMENT SUR NETLIFY
+====================================================
+
+CONTENU (ne rien renommer, ne rien déplacer) :
+  - index.html, style.css, script.js, logo.png
+  - Photos : camion, amenagement-terrasse, amenagement-allee,
+    petanque-terrain, petanque-pelle, petanque-court,
+    maconnerie-1, maconnerie-2
+
+----------------------------------------------------
+  METTRE EN LIGNE (2 min) :
+----------------------------------------------------
+1. Va sur  https://app.netlify.com/drop
+2. Glisse TOUT LE DOSSIER "netlify-tp-joset" dans la zone
+3. Netlify te donne une adresse https://xxxxxx.netlify.app
+4. C'est en ligne ! Le formulaire de devis fonctionne.
+
+POUR MODIFIER PLUS TARD :
+- Tableau de bord Netlify → onglet "Deploys"
+  → reglisse le dossier mis à jour.
+
+NOM PERSONNALISÉ (optionnel) :
+- Site settings → Domain management → change le nom
+  (ex : joset-tp.netlify.app) ou branche un vrai domaine.
+====================================================
